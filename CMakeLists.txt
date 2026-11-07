@@ -30,6 +30,13 @@ function(kb_add_plugin TARGET NAME CODE IS_SYNTH)
   set(options)
   set(multi SOURCES MI_SOURCES)
   cmake_parse_arguments(A "" "" "${multi}" ${ARGN})
+  if(IS_SYNTH)
+    set(KB_VST3_CAT Instrument Synth)
+    set(KB_AU_TYPE kAudioUnitType_MusicDevice)
+  else()
+    set(KB_VST3_CAT Fx)
+    set(KB_AU_TYPE kAudioUnitType_Effect)
+  endif()
   juce_add_plugin(${TARGET}
     PRODUCT_NAME "${NAME}"
     COMPANY_NAME "kalabash"
@@ -44,8 +51,8 @@ function(kb_add_plugin TARGET NAME CODE IS_SYNTH)
     IS_MIDI_EFFECT FALSE
     EDITOR_WANTS_KEYBOARD_FOCUS FALSE
     COPY_PLUGIN_AFTER_BUILD FALSE
-    VST3_CATEGORIES $<IF:$<BOOL:${IS_SYNTH}>,Instrument,Fx>
-    AU_MAIN_TYPE $<IF:$<BOOL:${IS_SYNTH}>,kAudioUnitType_MusicDevice,kAudioUnitType_MusicEffect>)
+    VST3_CATEGORIES ${KB_VST3_CAT}
+    AU_MAIN_TYPE ${KB_AU_TYPE})
   target_sources(${TARGET} PRIVATE ${A_SOURCES} ${A_MI_SOURCES} ${STMLIB_SRC}
     ${CMAKE_SOURCE_DIR}/common/PanelUI.cpp)
   # The original firmware sources are built in their desktop ("TEST") configuration.

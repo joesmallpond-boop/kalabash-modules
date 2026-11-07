@@ -50,8 +50,8 @@ jobs:
           killall -9 AudioComponentRegistrar || true
           auval -v aumu Knot Klbs || true
           auval -v aumu Allo Klbs || true
-          auval -v aumf Fogb Klbs || true
-          auval -v aumf Abac Klbs || true
+          auval -v aufx Fogb Klbs || true
+          auval -v aufx Abac Klbs || true
 
       - name: Build installer (.pkg)
         run: bash installer/make_pkg.sh "${GITHUB_REF_NAME}"
