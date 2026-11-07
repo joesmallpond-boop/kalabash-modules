@@ -6,11 +6,17 @@ on:
     tags: [ 'v*' ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   mac:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Read version
+        run: echo "KB_VERSION=$(cat VERSION)" >> "$GITHUB_ENV"
 
       - name: Configure (universal arm64 + x86_64)
         run: |
@@ -78,16 +84,19 @@ jobs:
           auval -v aufx Fogb Klbs || true
           auval -v aufx Abac Klbs || true
 
-      - name: Build installer (.pkg)
-        run: bash installer/make_pkg.sh "${GITHUB_REF_NAME}"
+      - name: Build installer (.pkg) + zip
+        run: bash installer/make_pkg.sh "$(cat VERSION)"
 
       - uses: actions/upload-artifact@v4
         with:
           name: kalabash-modules-mac
           path: dist/*.zip
 
-      - name: Release
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Publish release
+        if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ env.KB_VERSION }}
+          name: kalabash modules
+          make_latest: true
           files: dist/*.zip
