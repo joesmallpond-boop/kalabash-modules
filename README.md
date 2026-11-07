@@ -93,7 +93,7 @@ Drop it on a MIDI track in front of an instrument.
 ## Building on Linux/Mac for development
 
 ```
-cmake -B build -DCMAKE_BUILD_TYPE=Release        # fetches JUCE 8.0.4
+cmake -B build -DCMAKE_BUILD_TYPE=Release        # fetches JUCE 8.0.15
 cmake --build build -j
 python3 marbles-m4l/build-tools/make_amxd.py      # builds marbles-m4l/build/DICEBAG.amxd
 ```
