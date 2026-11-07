@@ -14,12 +14,19 @@ jobs:
 
       - name: Configure (universal arm64 + x86_64)
         run: |
-          cmake -B build -G Xcode \
+          cmake -B build -G "Unix Makefiles" \
+            -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
             -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
 
       - name: Build plugins
-        run: cmake --build build --config Release -j 4
+        shell: bash
+        run: |
+          set -o pipefail
+          cmake --build build --config Release -j 4 2>&1 | tee build.log || {
+            echo "::group::compiler errors"; grep -n -E "error:|Error [0-9]" build.log | head -80; echo "::endgroup::"
+            grep -E "error:" build.log | head -20 | while read -r l; do echo "::error::$l"; done
+            exit 1; }
 
       - name: Collect, ad-hoc sign
         run: |
