@@ -102,7 +102,8 @@ class AlloyProcessor : public KbProcessor {
     p.flow = v("flow"); p.mallet = v("mallet");
     p.bowTimbre = v("bowTimbre"); p.blowTimbre = v("blowTimbre"); p.strikeTimbre = v("strikeTimbre");
     // TUNED: COARSE snaps to semitones (as on the module) so MIDI notes stay in tune.
-    p.coarse = vb("tuned") ? std::round(v("coarse")) : v("coarse");
+    p.tuned = vb("tuned");
+    p.coarse = p.tuned ? std::round(v("coarse")) : v("coarse");
     p.fine = v("fine") / 100.0f + 12.0f * std::log2(v("a4") / 440.0f); p.fmAmt = v("fm");
     p.geometry = v("geometry"); p.brightness = v("brightness"); p.damping = v("damping");
     p.position = v("position"); p.space = v("space");

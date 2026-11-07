@@ -1,0 +1,24 @@
+kalabash modules
+================
+
+EASY INSTALL
+Right-click the .pkg and choose Open (it's unsigned, so macOS asks the first time),
+then follow the installer. Rescan plugins in Live afterwards.
+
+It installs:
+  Max for Live devices -> User Library > Presets
+      DICEBAG   MIDI Effects > Max MIDI Effect > kalabash   (random sequencer + modulator)
+      KNOTWORK  Instruments > Max Instrument > kalabash     (macro oscillator)
+      ALLOY     Instruments > Max Instrument > kalabash     (modal synthesis voice)
+      FOGBANK   Audio Effects > Max Audio Effect > kalabash (granular texture processor)
+      ABACUS    Audio Effects > Max Audio Effect > kalabash (granular texture synthesizer)
+  Max externals the devices need -> Documents/Max 8 and Max 9/Packages/kalabash
+  VST3 + AU versions of KNOTWORK, ALLOY, FOGBANK, ABACUS -> /Library/Audio/Plug-Ins
+
+MANUAL INSTALL (if you prefer)
+  Copy each folder in "Max for Live" anywhere in your User Library (each folder already
+  contains the external its device needs), or copy "Max package/kalabash" into
+  Documents/Max 9/Packages (and/or Max 8). Copy VST3 and Components into
+  /Library/Audio/Plug-Ins/VST3 and /Library/Audio/Plug-Ins/Components.
+
+The DSP comes from Mutable Instruments' open-source firmware by Emilie Gillet (MIT licence).

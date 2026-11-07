@@ -28,6 +28,21 @@ jobs:
             grep -E "error:" build.log | head -20 | while read -r l; do echo "::error::$l"; done
             exit 1; }
 
+      - name: Build Max externals (for the Max for Live devices)
+        shell: bash
+        run: |
+          set -o pipefail
+          git clone --depth 1 https://github.com/Cycling74/max-sdk-base.git max-sdk-base
+          cmake -S m4l/externals -B build-ext -G "Unix Makefiles" \
+            -DMAX_SDK_BASE="$PWD/max-sdk-base" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+          cmake --build build-ext -j 4 2>&1 | tee ext.log || {
+            grep -E "error:" ext.log | head -20 | while read -r l; do echo "::error::$l"; done
+            exit 1; }
+          ls build-ext/externals
+
       - name: Collect, ad-hoc sign
         run: |
           mkdir -p stage/vst3 stage/au
@@ -41,6 +56,16 @@ jobs:
           python3 marbles-m4l/build-tools/make_amxd.py
           mkdir -p stage/m4l/DICEBAG
           cp marbles-m4l/build/DICEBAG.amxd marbles-m4l/build/*.js stage/m4l/DICEBAG/
+          (cd m4l/build-tools && python3 make_devices.py)
+          mkdir -p stage/m4l/externals
+          cp -R build-ext/externals/*.mxo stage/m4l/externals/
+          for b in stage/m4l/externals/*.mxo; do codesign --force --deep --sign - "$b"; done
+          for d in KNOTWORK ALLOY FOGBANK ABACUS; do
+            mkdir -p stage/m4l/$d
+            cp m4l/build/$d.amxd stage/m4l/$d/
+            lc=$(echo $d | tr A-Z a-z)
+            cp -R "stage/m4l/externals/kb.${lc}~.mxo" stage/m4l/$d/
+          done
 
       - name: Validate Audio Units
         continue-on-error: true
@@ -59,14 +84,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: kalabash-modules-mac
-          path: |
-            dist/*.pkg
-            dist/*.zip
+          path: dist/*.zip
 
       - name: Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist/*.pkg
-            dist/*.zip
+          files: dist/*.zip

@@ -10,6 +10,8 @@ These are five Ableton devices built from Mutable Instruments' open-source Euror
 | **ABACUS** | Beads | Audio effect | VST3 / AU |
 | **DICEBAG** | Marbles | MIDI effect, sequencer and modulator | Max for Live (.amxd) |
 
+KNOTWORK, ALLOY, FOGBANK and ABACUS also come as Max for Live devices in the same style as DICEBAG. They use Live's own dials, and the DSP runs in compiled Max externals (`m4l/externals`) that share the same cores as the plugins. `m4l/build-tools/make_devices.py` builds the devices.
+
 The names are new because the eurorack README asks derivative works not to use the Mutable Instruments name or the module names. Each device credits the original in its UI.
 
 ## Install (Mac)
