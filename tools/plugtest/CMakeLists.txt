@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.22)
+project(plugtest VERSION 1.0.0)
+set(CMAKE_CXX_STANDARD 17)
+add_subdirectory(/home/claude/ext/JUCE juce)
+juce_add_console_app(plugtest)
+target_sources(plugtest PRIVATE main.cpp)
+target_compile_definitions(plugtest PRIVATE JUCE_PLUGINHOST_VST3=1 JUCE_MODAL_LOOPS_PERMITTED=1 JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0)
+target_link_libraries(plugtest PRIVATE juce::juce_audio_utils juce::juce_audio_processors)

@@ -1,0 +1,7 @@
+build/
+tools/plugtest/b/
+marbles-m4l/build/
+stage/
+pkgwork/
+dist/
+*.o
