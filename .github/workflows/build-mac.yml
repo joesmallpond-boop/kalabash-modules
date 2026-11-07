@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Read version
-        run: echo "KB_VERSION=$(cat VERSION)" >> "$GITHUB_ENV"
+        run: echo "KB_VERSION=$(cat release-version.txt)" >> "$GITHUB_ENV"
 
       - name: Configure (universal arm64 + x86_64)
         run: |
@@ -85,7 +85,7 @@ jobs:
           auval -v aufx Abac Klbs || true
 
       - name: Build installer (.pkg) + zip
-        run: bash installer/make_pkg.sh "$(cat VERSION)"
+        run: bash installer/make_pkg.sh "$(cat release-version.txt)"
 
       - uses: actions/upload-artifact@v4
         with:
